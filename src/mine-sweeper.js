@@ -23,11 +23,75 @@ const { NotImplementedError } = require('../extensions/index.js');
  *  [1, 1, 1]
  * ]
  */
-function minesweeper(/* matrix */) {
-  throw new NotImplementedError('Not implemented');
-  // remove line with error and write your code here
-}
+ function minesweeper(matrix) {
+  const res = [];
+  for (let i = 0; i < matrix.length; i++) {
+    res.push([]);
+    for (let j = 0; j < matrix[i].length; j++) {
+      let minesCount = 0;
+      
+      // top left
+      if (i !== 0 && j !== 0) {
+        if (matrix[i - 1][j - 1] === true) {
+          minesCount++;
+        }
+      }
 
+      // top right
+      if (i !== 0 && j !== matrix[i].length - 1) {
+        if (matrix[i - 1][j + 1] === true) {
+          minesCount++;
+        }
+      }
+
+      // bottom left
+      if (i !== matrix.length - 1 && j !== 0) {
+        if (matrix[i + 1][j - 1] === true) {
+          minesCount++;
+        }
+      }
+
+      // bottom right
+      if (i !== matrix.length - 1 && j !== matrix[i].length - 1) {
+        if (matrix[i + 1][j + 1] === true) {
+          minesCount++;
+        }
+      }
+
+      // left
+      if (j !== 0) {
+        if (matrix[i][j - 1] === true) {
+          minesCount++;
+        }
+      }
+
+      // right
+      if (j !== matrix[i].length - 1) {
+        if (matrix[i][j + 1] === true) {
+          minesCount++;
+        }
+      }
+
+      // top
+      if (i !== 0) {
+        if (matrix[i - 1][j] === true) {
+          minesCount++;
+        }
+      }
+
+      // bottom
+      if (i !== matrix.length - 1) {
+        if (matrix[i + 1][j] === true) {
+          minesCount++;
+        }
+      }
+
+      res[i].push(minesCount);
+    }
+  }
+
+  return res;
+}
 module.exports = {
   minesweeper
 };

@@ -19,14 +19,93 @@ const { NotImplementedError } = require('../extensions/index.js');
  * reverseMachine.decrypt('AEIHQX SX DLLU!', 'alphonse') => '!NWAD TA KCATTA'
  * 
  */
-class VigenereCipheringMachine {
-  encrypt() {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+ class VigenereCipheringMachine {
+  constructor(direction = true) {
+    this.direction = direction;
   }
-  decrypt() {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+  encrypt(message, key) {
+    if (message === undefined || key === undefined) {
+      throw new Error('Incorrect arguments!');
+    }
+
+    let keyChar = 0;
+    let keyMessage = [];
+    
+    for (let i = 0; i < message.length; i++) {
+      if (/\w/.test(message[i])) {
+        if (keyChar === key.length) {
+          keyChar = 0;
+        }
+  
+        keyMessage.push(key[keyChar].toUpperCase());
+        keyChar++;
+      } else {
+        keyMessage.push(message[i].toUpperCase());
+      }
+    }
+    
+    key = keyMessage.join('');
+  
+    message = message.toUpperCase();
+    const FIRST_LETTER = 'A'.charCodeAt(0);
+    let LETTERS_COUNT = 26;
+    const res = [];
+    
+    for (let i = 0; i < message.length; i++) {
+      if (/[A-Z]/.test(message[i])) {
+  
+        let letterCharCode = message.charCodeAt(i) - FIRST_LETTER;
+        let shift = key.charCodeAt(i) - FIRST_LETTER;
+        
+        res.push(String.fromCharCode(FIRST_LETTER + (letterCharCode + shift) % LETTERS_COUNT))
+      } else {
+        res.push(message[i]);
+      }
+    }
+    
+    return this.direction ? res.join('') : res.reverse().join('');
+  }
+  decrypt(message, key) {
+    if (message === undefined || key === undefined) {
+      throw new Error('Incorrect arguments!');
+    }
+
+    let keyChar = 0;
+    let keyMessage = [];
+    
+    for (let i = 0; i < message.length; i++) {
+      if (/\w/.test(message[i])) {
+        if (keyChar === key.length) {
+          keyChar = 0;
+        }
+  
+        keyMessage.push(key[keyChar].toUpperCase());
+        keyChar++;
+      } else {
+        keyMessage.push(message[i].toUpperCase());
+      }
+    }
+    
+    key = keyMessage.join('');
+  
+    message = message.toUpperCase();
+    const FIRST_LETTER = 'A'.charCodeAt(0);
+    let LETTERS_COUNT = 26;
+    const res = [];
+    
+    for (let i = 0; i < message.length; i++) {
+      if (/[A-Z]/.test(message[i])) {
+  
+        let letterCharCode = message.charCodeAt(i) - FIRST_LETTER;
+        let shift = key.charCodeAt(i) - FIRST_LETTER;
+        
+        res.push(String.fromCharCode(FIRST_LETTER + (letterCharCode - shift + LETTERS_COUNT) % LETTERS_COUNT))
+      } else {
+        res.push(message[i]);
+      }
+    }
+    
+    return this.direction ? res.join('') : res.reverse().join('');
   }
 }
 
